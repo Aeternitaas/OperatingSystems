@@ -7,7 +7,7 @@ class Customer extends Thread {
 	public void run() {
         barbershop.customersBuffer();
         try {
-            sleep(300);
+            sleep(3000);
         } catch (InterruptedException e) {
 		}
 	}

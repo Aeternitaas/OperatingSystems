@@ -12,7 +12,7 @@ class Barber extends Thread {
 			barbershop.barbersBuffer();
             barbershop.cashierBuffer();
 			try {
-				sleep(300);
+				sleep(3000);
 			} catch (InterruptedException e) {
 			}
 		}
