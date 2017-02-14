@@ -7,8 +7,8 @@ class TestBarbershop {
 			(new Barber(i, bs)).start();
 		for (int i = 0; i <= 9; i++) 
 			(new Customer(i, bs)).start();
-		Thread a[] = new Thread[Thread.activeCount()];
-		Thread.enumerate(a);
-		System.out.println(Arrays.toString(a));
+		//Thread a[] = new Thread[Thread.activeCount()];
+		//Thread.enumerate(a);
+		//System.out.println(Arrays.toString(a));
 	}
 }
