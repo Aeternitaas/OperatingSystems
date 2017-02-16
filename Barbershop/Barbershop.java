@@ -87,7 +87,7 @@ class Barbershop {
         System.out.println(Thread.currentThread().getName() + " accepts payment.");
         action++;				//semSignal(action);
         notifyAll();
-        receipt = 1;			//semSignal(receipt);
+        receipt++;			//semSignal(receipt);
         notifyAll();
     }
     /**
@@ -180,7 +180,7 @@ class Barbershop {
                 wait();
             } catch (InterruptedException e) {
             }
-        receipt = 0;
+        receipt--;
         System.out.println(Thread.currentThread().getName() + " takes receipt and exits.");
         count--;
         if (count == 0)
