@@ -5,12 +5,13 @@
 //================================================================
 
 import java.util.Arrays;
+import java.util.Random;
 
 class Barbershop {
     private int inBarberChair = 0, couch = 4, barberChairs = 3, 
-            hairCut = 0, count = 20, action = 3, finished = 0, 
+            out = 0, count = 20, action = 3, finished = 0, 
             payment = 0, receipt = 0, readyCust = 0, finishedCut = 0,
-            atReg = 0, sit = 0, sitCouch = 0, leaveCouch = 0;
+            atReg = 0, sit = 0;
 
     private String[] barberChairBuffer = new String[3];
     private String[] couchBuffer = new String[4];
@@ -28,20 +29,12 @@ class Barbershop {
      * adding them to the couchBuffer array.
      */
     private void sitCouch() { 
-        couchBuffer[sitCouch] = Thread.currentThread().getName();
-        sitCouch = (sitCouch + 1) % couchBuffer.length;
+        for (int i = 0; i < couchBuffer.length; i++) 
+            if (couchBuffer[i].equals("Empty")) {
+                couchBuffer[i] = Thread.currentThread().getName();
+                break;
+            }
         System.out.println( Thread.currentThread().getName() + " sits on the couch: " + Arrays.toString(couchBuffer));
-    }
-    /**
-     * Removes the customer from the couch.
-     *
-     * Removes the customer from the couchBuffer by finding a person and setting
-     * it to empty.
-     */
-    private void leaveCouch() {
-        couchBuffer[leaveCouch] = "Empty";
-        leaveCouch = (leaveCouch + 1) % couchBuffer.length;
-        System.out.println( Thread.currentThread().getName() + " leaves the couch: " + Arrays.toString(couchBuffer));
     }
     /**
      * Sits a customer from the couchBuffer onto a barberChair.
@@ -50,26 +43,32 @@ class Barbershop {
      * the chair, placing them onto the barberChair buffer.
      */
     private void sitBarberChair() {
+        while (!barberChairBuffer[inBarberChair].equals("Empty"))
+            inBarberChair = (inBarberChair + 1) % barberChairBuffer.length;
         barberChairBuffer[inBarberChair] = Thread.currentThread().getName();
         inBarberChair = (inBarberChair + 1) % barberChairBuffer.length;
         System.out.println( Thread.currentThread().getName() + " sits in barber chair: " + Arrays.toString(barberChairBuffer));
     }
     /**
-     * Cuts a customer's hair.
+     * Removes the customer from the couch.
      *
-     * Removes customer from the barberChairBuffer after cutting.
+     * Removes the customer from the couchBuffer by finding a person and setting
+     * it to empty.
      */
+    private void leaveCouch() {
+        for (int i = 0; i < couchBuffer.length; i++) 
+            if (couchBuffer[i].equals(Thread.currentThread().getName()))
+                couchBuffer[i] = "Empty";
+        System.out.println( Thread.currentThread().getName() + " leaves the couch: " + Arrays.toString(couchBuffer));
+    }
     private void cutHair() {
-        String cust = barberChairBuffer[hairCut];
-        barberChairBuffer[hairCut] = "Empty";
-        hairCut = (hairCut + 1) % barberChairBuffer.length;
+        while (barberChairBuffer[out].equals("Empty"))
+            out = (out + 1) % barberChairBuffer.length;
+        String cust = barberChairBuffer[out];
+        barberChairBuffer[out] = "Empty";
+        out = (out + 1) % barberChairBuffer.length;
         System.out.println( Thread.currentThread().getName() + " cuts " + cust + "'s hair " + Arrays.toString(barberChairBuffer) );
     }
-    /**
-     * Performs cashier operations.
-     *
-     * Operated by a free barber, performs transactions one at a time.
-     */
     public synchronized void cashierBuffer(){
         while (payment == 0) 
             try {
@@ -90,11 +89,6 @@ class Barbershop {
         receipt = 1;			//semSignal(receipt);
         notifyAll();
     }
-    /**
-     * Performs barber's operations.
-     *
-     * Cuts customer's hair, otherwise sleep.
-     */
     public synchronized void barbersBuffer(){
         System.out.println(Thread.currentThread().getName() + " is ready to cut hair.");
         while (readyCust == 0)
@@ -126,12 +120,6 @@ class Barbershop {
         if (couch == 1)
             notifyAll();
     }
-    /**
-     * Performs customer's operations.
-     *
-     * Goes from the waiting area, to the couch, to the barber's chair,
-     * performs transactions and leaves.
-     */
     public synchronized void customersBuffer() {
         System.out.println(Thread.currentThread().getName() + " enters.");
         while (count == 0)        //If the waiting area is full.

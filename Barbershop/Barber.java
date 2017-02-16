@@ -1,5 +1,3 @@
-import java.util.Random;
-
 class Barber extends Thread {
 	private Barbershop barbershop;
 	private int i;
@@ -12,7 +10,7 @@ class Barber extends Thread {
 			barbershop.barbersBuffer();
             barbershop.cashierBuffer();
 			try {
-				sleep(3000);
+				sleep(300);
 			} catch (InterruptedException e) {
 			}
 		}

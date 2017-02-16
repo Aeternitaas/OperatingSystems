@@ -1,3 +1,9 @@
+//================================================================
+//==Ket-Meng Cheng ~ Operating Systems and Computer Architecture==
+//== ---------------------------------------------------------- ==
+//==                      Program #1                            ==
+//================================================================
+
 import java.util.Arrays;
 
 class TestBarbershop {
@@ -5,7 +11,7 @@ class TestBarbershop {
 		Barbershop bs = new Barbershop();
 		for (int i = 0; i <= 2; i++) 
 			(new Barber(i, bs)).start();
-		for (int i = 0; i <= 30; i++) 
+		for (int i = 0; i <= 50; i++) 
 			(new Customer(i, bs)).start();
 		//Thread a[] = new Thread[Thread.activeCount()];
 		//Thread.enumerate(a);
